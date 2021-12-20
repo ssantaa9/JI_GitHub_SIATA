@@ -30,21 +30,25 @@ def cleandata(file,porcentaje,datos):
 
         final_columns = d.columns.tolist()
         for i in final_columns:
-            d = d.drop(d[(d[i]==-9999.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos malos
+            if(len(d[(d[i]==-9999.0)])>0):
+                d = d.drop(d[(d[i]==-9999.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos malos
 
         #Matriz con solo las columnas de calidad
         calidad = d[d.columns[[d.columns.to_list().index(s) for s in d.columns.to_list() if s.__contains__("calidad")]].to_list()]
 
         calidad_columns = calidad.columns.tolist()
         for i in calidad_columns:
-            d = d.drop(d[(d[i]>=2.6)].index.to_list(), axis=0) #Elimnar las filas que tengan datos de calidad malos
-            calidad = calidad.drop(calidad[(calidad[i]>=2.6)].index.to_list(), axis=0)
+            if(len(d[(d[i]>=2.6)])>0):
+                d = d.drop(d[(d[i]>=2.6)].index.to_list(), axis=0) #Elimnar las filas que tengan datos de calidad malos
+                calidad = calidad.drop(calidad[(calidad[i]>=2.6)].index.to_list(), axis=0)
 
 
 
     elif (datos == 2):
         d.index = pd.to_datetime(d['fecha_hora']) #Definir como id la fecha y hora
         del(d['fecha_hora'])
+        d = d[d.index.minute == 0] #Obtener los datos cada hora
+
         k = abs(((d[d==-999.0]).sum())/999.0)# Missing values in columns
 
         to_delete = (k>= (len(d)*(porcentaje/100))).tolist() # Eliminar las columnas que tengan el 10% o mas de datos faltantes
@@ -54,19 +58,22 @@ def cleandata(file,porcentaje,datos):
             if(to_delete[i]):
                 index_to_delete.append(i)
                 index_to_delete.append(i+1)
+
         for i in index_to_delete:
             del(d[columns[i]])
 
         final_columns = d.columns.tolist()
         for i in final_columns:
-            d = d.drop(d[(d[i]==-999.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos malos
+            if(len(d[(d[i]==-999.0)])>0):
+              d = d.drop(d[(d[i]==-999.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos malos
 
         #Matriz con solo las columnas de calidad
-        calidad = d[d.columns[[d.columns.to_list().index(s) for s in d.columns.to_list() if s.__contains__("calidad")]].to_list()]
+        calidad = d[d.columns[[d.columns.to_list().index(s) for s in d.columns.to_list() if s.__contains__("Calidad")]].to_list()]
 
         calidad_columns = calidad.columns.tolist()
         for i in calidad_columns:
-            d = d.drop(d[(d[i]!=1.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos de calidad malos
-            calidad = calidad.drop(calidad[(calidad[i]!=1.0)].index.to_list(), axis=0)
+            if(len(d[(d[i]!=1.0)])>0):
+              d = d.drop(d[(d[i]!=1.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos de calidad malos
+              calidad = calidad.drop(calidad[(calidad[i]!=1.0)].index.to_list(), axis=0)
       
     return d
