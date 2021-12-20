@@ -21,23 +21,23 @@ def cleandata(file,porcentaje,datos):
         columns = d.columns.tolist()
         index_to_delete = []
         for i in range(len(to_delete)):
-        if(to_delete[i]):
-        index_to_delete.append(i)
-        index_to_delete.append(i+1)
+            if(to_delete[i]):
+                index_to_delete.append(i)
+                index_to_delete.append(i+1)
         for i in index_to_delete:
-        del(d[columns[i]])
+            del(d[columns[i]])
 
         final_columns = d.columns.tolist()
         for i in final_columns:
-        d = d.drop(d[(d[i]==-9999.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos malos
+            d = d.drop(d[(d[i]==-9999.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos malos
 
         #Matriz con solo las columnas de calidad
         calidad = d[d.columns[[d.columns.to_list().index(s) for s in d.columns.to_list() if s.__contains__("calidad")]].to_list()]
 
         calidad_columns = calidad.columns.tolist()
         for i in calidad_columns:
-        d = d.drop(d[(d[i]>=2.6)].index.to_list(), axis=0) #Elimnar las filas que tengan datos de calidad malos
-        calidad = calidad.drop(calidad[(calidad[i]>=2.6)].index.to_list(), axis=0)
+            d = d.drop(d[(d[i]>=2.6)].index.to_list(), axis=0) #Elimnar las filas que tengan datos de calidad malos
+            calidad = calidad.drop(calidad[(calidad[i]>=2.6)].index.to_list(), axis=0)
 
 
 
