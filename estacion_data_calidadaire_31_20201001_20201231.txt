@@ -10,4 +10,3 @@ estacion_data_calidadaire_37_20200901_20200930.csv
 estacion_data_calidadaire_37_20201001_20201031.csv
 estacion_data_calidadaire_37_20201101_20201130.csv
 estacion_data_calidadaire_37_20201201_20201231.csv
-
