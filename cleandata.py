@@ -13,9 +13,9 @@ def cleandata(file,porcentaje,datos):
             
     if (datos == 1): 
         #Para algunos datos la fecha y hora estan en 'Unamed 0:' y para otros en 'Fecha_Hora'
-        d['fecha_hora'] = d['Unnamed: 0'].fillna(d['Fecha_Hora']) #Se unifica la fecha y hora en una columna 'id'
-        d.index = pd.to_datetime(d['fecha_hora']) #Definir como id la fecha y hora
-        del(d['Unnamed: 0'], d['Fecha_Hora'], d['fecha_hora'])
+        #d['fecha_hora'] = d['Unnamed: 0'].fillna(d['Fecha_Hora']) #Se unifica la fecha y hora en una columna 'id'
+        d.index = pd.to_datetime(d['Fecha_hora']) #Definir como id la fecha y hora
+        #del(d['Unnamed: 0'], d['Fecha_Hora'], d['fecha_hora'])
         k = abs(((d[d==-9999.0]).sum())/9999.0)# Missing values in columns
 
         to_delete = (k>= (len(d)*(porcentaje/100))).tolist() # Eliminar las columnas que tengan el 10% o mas de datos faltantes
