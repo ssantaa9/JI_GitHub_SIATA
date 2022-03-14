@@ -86,4 +86,19 @@ def cleandata(file,porcentaje,datos):
               d = d.drop(d[(d[i]!=1.0)].index.to_list(), axis=0) #Elimnar las filas que tengan datos de calidad malos
               calidad = calidad.drop(calidad[(calidad[i]!=1.0)].index.to_list(), axis=0)
       
+    elif (datos == 3):
+        #Para algunos datos la fecha y hora estan en 'Unamed 0:' y para otros en 'Fecha_Hora'
+        if (('Unnamed: 0' in d.columns) and ('Fecha_Hora' in d.columns)):
+            d['fecha_hora'] = d['Unnamed: 0'].fillna(d['Fecha_Hora']) #Se unifica la fecha y hora en una columna 'id'
+            d.index = pd.to_datetime(d['fecha_hora']) #Definir como id la fecha y hora
+            del(d['Unnamed: 0'], d['Fecha_Hora'], d['fecha_hora'])
+        elif ('Fecha_Hora' in d.columns):
+            d['fecha_hora'] = d['Fecha_Hora'] #Se unifica la fecha y hora en una columna 'id'
+            d.index = pd.to_datetime(d['fecha_hora']) #Definir como id la fecha y hora
+            del(d['Fecha_Hora'], d['fecha_hora'])
+        elif ('Unnamed: 0' in d.columns):
+            d['fecha_hora'] = d['Unnamed: 0'] #Se unifica la fecha y hora en una columna 'id'
+            d.index = pd.to_datetime(d['fecha_hora']) #Definir como id la fecha y hora
+            del(d['Unnamed: 0'], d['fecha_hora'])
+
     return d
