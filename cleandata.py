@@ -101,4 +101,17 @@ def cleandata(file,porcentaje,datos):
             d.index = pd.to_datetime(d['fecha_hora']) #Definir como id la fecha y hora
             del(d['Unnamed: 0'], d['fecha_hora'])
 
+        #Delete all columns except pm25 and calidad_pm25
+        columns_to_delete = d.columns.to_list()
+        del columns_to_delete[1:3] #We don't want delete pm25 and calidad_pm25
+        d = d.drop(columns=columns_to_delete)
+
+        #Delete pm25 rows that have -9999.0
+        if(len(d[(d['pm25']==-9999.0)])>0):
+            d = d.drop(d[(d['pm25']==-9999.0)].index.to_list(), axis=0)
+
+        #Delete calidad_pm25 rows where are higher than 2.6
+        if(len(d[(d['calidad_pm25']>=2.6)])>0):
+            d = d.drop(d[(d['calidad_pm25']>=2.6)].index.to_list(), axis=0)
+
     return d
